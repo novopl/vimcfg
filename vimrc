@@ -28,6 +28,7 @@ set completeopt=menuone,longest,preview
 set encoding=utf-8
 let mapleader = ","
 set hlsearch
+set number
 "}}}
 
 "{{{ Plugin conf
