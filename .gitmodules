@@ -1,0 +1,45 @@
+[submodule "plugins/closetag"]
+	path = plugins/closetag
+	url = git://github.com/docunext/closetag.vim
+[submodule "plugins/cmake"]
+	path = plugins/cmake
+	url = git://github.com/vhdirk/vim-cmake
+[submodule "plugins/command-t"]
+	path = plugins/command-t
+	url = git://git.wincent.com/command-t.git
+[submodule "plugins/delimitmate"]
+	path = plugins/delimitmate
+	url = git://github.com/Raimondi/delimitMate
+[submodule "plugins/fugitive"]
+	path = plugins/fugitive
+	url = git://github.com/tpope/vim-fugitive
+[submodule "plugins/nerdtree"]
+	path = plugins/nerdtree
+	url = git://github.com/scrooloose/nerdtree
+[submodule "plugins/syntastic"]
+	path = plugins/syntastic
+	url = git://github.com/scrooloose/syntastic
+[submodule "plugins/tagbar"]
+	path = plugins/tagbar
+	url = git://github.com/majutsushi/tagbar
+[submodule "plugins/supertab"]
+	path = plugins/supertab
+	url = git://github.com/ervandew/supertab
+[submodule "plugins/jedi-vim"]
+	path = plugins/jedi-vim
+	url = git://github.com/davidhalter/jedi-vim
+[submodule "plugins/pydiction"]
+	path = plugins/pydiction
+	url = git://github.com/rkulla/pydiction
+[submodule "plugins/pyflakes"]
+	path = plugins/pyflakes
+	url = git://github.com/kevinw/pyflakes-vim
+[submodule "plugins/clang_complete"]
+	path = plugins/clang_complete
+	url = git://github.com/Rip-Rip/clang_complete
+[submodule "plugins/vim-coffee-script"]
+	path = plugins/vim-coffee-script
+	url = git://github.com/kchmck/vim-coffee-script
+[submodule "pathogen"]
+	path = pathogen
+	url = git://github.com/tpope/vim-pathogen
