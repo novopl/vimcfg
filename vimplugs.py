@@ -58,10 +58,9 @@ def sync_plugins():
 
   # Enable/disable plugins
   for plugin in plugins:
-    abspath = os.path.abspath
-    join = os.path.join
-    repoPath    = abspath( join( g_reposPath, plugin.name ) )
-    pluginPath  = abspath( join( mkpath('vim/bundle'), plugin.name ) )
+    abspath, join = os.path.abspath, os.path.join
+    repoPath      = abspath( join( g_reposPath, plugin.name ) )
+    pluginPath    = abspath( join( mkpath('vim/bundle'), plugin.name ) )
 
     if plugin.mode == '+' and not os.path.exists( pluginPath ):
       print("-- Enabling "+plugin.name)

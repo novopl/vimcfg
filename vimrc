@@ -7,7 +7,7 @@ syntax on
 filetype plugin indent on
 
 "{{{ Settings
-colorscheme molokai
+colorscheme molokai-novo
 " Indents
 set tabstop=2
 set shiftwidth=2
