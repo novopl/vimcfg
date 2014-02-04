@@ -43,3 +43,12 @@
 [submodule "pathogen"]
 	path = pathogen
 	url = git://github.com/tpope/vim-pathogen
+[submodule "plugins/vim-less"]
+	path = plugins/vim-less
+	url = git://github.com/groenewege/vim-less
+[submodule "plugins/vim-css-color"]
+	path = plugins/vim-css-color
+	url = git://github.com/skammer/vim-css-color
+[submodule "plugins/vim-css3-syntax"]
+	path = plugins/vim-css3-syntax
+	url = git://github.com/hail2u/vim-css3-syntax.git
