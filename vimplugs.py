@@ -6,11 +6,10 @@ import os.path
 from collections import namedtuple
 
 Plugin        = namedtuple( 'Plugin', 'mode name repo' )
-g_vimcfgPath  = os.path.expanduser('~/dotfiles/vimcfg')
-#mkpath        = lambda x: os.path.join( g_vimcfgPath, x )
 mkpath        = lambda x: x
 g_configPath  = mkpath('plugins.conf')
 g_reposPath   = mkpath('plugins')
+g_pluginsPath = mkpath('vim/bundle')
 
 #-----------------------------------------------------------------------------//
 def load_config( path ):
@@ -34,9 +33,14 @@ def load_config( path ):
 def sync_plugins():
   plugins = load_config( g_configPath )
 
-  # Chekc if we have a submodule temp dir
+  # Check if we have a submodule temp dir
   if not os.path.exists( g_reposPath ):
     os.makedirs( g_reposPath )
+
+  # Check if we have the plugin directory
+  if not os.path.exists( g_pluginsPath ):
+    os.makedirs( g_pluginsPath )
+
 
   # Add submodules if they don't exist
   newRepos = False
@@ -60,7 +64,7 @@ def sync_plugins():
   for plugin in plugins:
     abspath, join = os.path.abspath, os.path.join
     repoPath      = abspath( join( g_reposPath, plugin.name ) )
-    pluginPath    = abspath( join( mkpath('vim/bundle'), plugin.name ) )
+    pluginPath    = abspath( join( g_pluginsPath, plugin.name ) )
 
     if plugin.mode == '+' and not os.path.exists( pluginPath ):
       print("-- Enabling "+plugin.name)
