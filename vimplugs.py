@@ -57,7 +57,7 @@ def sync_plugins():
       os.system('git rm -f {0}'.format( repoPath ))
 
   if newRepos:
-    print("-- Initializing new repos")
+    print("-- Initializing new plugins")
     os.system('git submodule update --init --recursive')
 
   # Enable/disable plugins
