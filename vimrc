@@ -78,6 +78,8 @@ map <Leader>gw      :Gwrite<CR>
 map <Leader>gr      :Gread<CR>
 map <Leader>gd      :Gdiff<CR>
 map <Leader>ge      :Gedit<CR>
+map <Leader>gpush   :Git push<CR>
+map <Leader>gpull   :Git pull<CR>
 map <Leader>qg      :!qgit4<CR><CR>
 map <Leader>nu      :windo call ToggleNumbers()<CR>
 map <Leader>gcommit :!git commit<CR>
