@@ -43,6 +43,15 @@
 [submodule "pathogen"]
 	path = pathogen
 	url = git://github.com/tpope/vim-pathogen
+[submodule "plugins/unimpaired"]
+	path = plugins/unimpaired
+	url = git://github.com/tpope/vim-unimpaired
+[submodule "plugins/airline"]
+	path = plugins/airline
+	url = git://github.com/bling/vim-airline
+[submodule "plugins/togglelist"]
+	path = plugins/togglelist
+	url = git://github.com/milkypostman/vim-togglelist
 [submodule "plugins/snipmate"]
 	path = plugins/snipmate
-	url = git://github.com/msanders/snipmate.vim
+	url = git://github.com/garbas/vim-snipmate

@@ -69,16 +69,18 @@ map <Leader>fix :call FixTabs()<CR>
 nnoremap <Leader>f  za 
 nnoremap <Leader>F  zA 
 " Git mappings
-map <Leader>gl      :!git log --oneline<CR><CR>
-map <Leader>gs      :!git status<CR>
-map <Leader>gau     :!git add -u<CR>
-map <Leader>gd      :!git diff<CR>
+map <Leader>c       :call ToggleQuickfixList()<CR>
+map <Leader>gl      :Glog<CR>:cw<CR>
+map <Leader>Gl      :Glog --<CR>:cw<CR>
+map <Leader>gs      :Gstatus<CR>
+map <Leader>gw      :Gwrite<CR>
+map <Leader>gr      :Gread<CR>
+map <Leader>gd      :Gdiff<CR>
+map <Leader>ge      :Gedit<CR>
 map <Leader>qg      :!qgit4<CR><CR>
 map <Leader>nu      :windo call ToggleNumbers()<CR>
 map <Leader>gcommit :!git commit<CR>
 map <Leader>gpush   :!git push<CR>
-map <Leader>cspush  :call CS_push()<CR>
-map <Leader>cspull  :call CS_pull()<CR>
 " View switching
 noremap <C-h> <C-w>h
 noremap <C-j> <C-w>j
