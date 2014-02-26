@@ -17,7 +17,7 @@ def load_config( path ):
   with open( path ) as fp:
     for line in fp.readlines():
       #m = regex.match( line )
-      m = re.match(r'(?P<mode>[+-^])(?P<name>[a-z_-]+)\s+:\s+(?P<repo>[^\s]+)',
+      m = re.match(r'(?P<mode>[+-^])(?P<name>[a-z\d_-]+)\s+:\s+(?P<repo>[^\s]+)',
           line
       )
 

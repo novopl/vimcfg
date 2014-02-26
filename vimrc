@@ -70,6 +70,7 @@ nnoremap <Leader>f  za
 nnoremap <Leader>F  zA 
 " Git mappings
 map <Leader>c       :call ToggleQuickfixList()<CR>
+map <Leader>w       :wa<CR>
 map <Leader>gl      :Glog<CR>:cw<CR>
 map <Leader>Gl      :Glog --<CR>:cw<CR>
 map <Leader>gs      :Gstatus<CR>
