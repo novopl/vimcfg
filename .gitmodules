@@ -52,9 +52,6 @@
 [submodule "plugins/togglelist"]
 	path = plugins/togglelist
 	url = git://github.com/milkypostman/vim-togglelist
-[submodule "plugins/snipmate"]
-	path = plugins/snipmate
-	url = git://github.com/garbas/vim-snipmate
 [submodule "plugins/tlib_vim"]
 	path = plugins/tlib_vim
 	url = git://github.com/tomtom/tlib_vim.git
@@ -70,3 +67,6 @@
 [submodule "plugins/css-color"]
 	path = plugins/css-color
 	url = git://github.com/ap/vim-css-color
+[submodule "plugins/ultisnips"]
+	path = plugins/ultisnips
+	url = git://github.com/SirVer/ultisnips

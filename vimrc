@@ -32,6 +32,8 @@ set number
 "}}}
 
 "{{{ Plugin conf
+let g:UltiSnipsSnippetDirectories=["mysnippets"]
+let g:utlisnips_python_style='sphinx'
 let g:jedi#use_tabs_not_buffers=0
 let g:pydiction_location='~/.vim/bundle/pydyction/complete-dict'
 let g:ycm_path_to_python_interpreter = '/usr/bin/python2'
@@ -58,8 +60,8 @@ map <F1>  :!docbuild<CR>
 map <F2>  :NERDTreeToggle<CR>
 map <F3>  :TagbarToggle<CR>
 map <F10> :qa<CR>
+map <Leader>g   :grep -nIR 
 " Shortcuts
-map <Leader>l   :TagbarToggle<Cr>
 map <Leader>v   :vsp<CR>
 map <Leader>s   :shell<CR>
 " Quick fixes
@@ -86,11 +88,14 @@ map <Leader>qg      :!qgit4<CR><CR>
 map <Leader>nu      :windo call ToggleNumbers()<CR>
 map <Leader>gcommit :!git commit<CR>
 map <Leader>gpush   :!git push<CR>
+map <Leader>l       gt
+map <Leader>h       gT
 " View switching
 noremap <C-h> <C-w>h
 noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
+noremap <S-t> gt
 " Window movement
 nnoremap <A-.> :call MoveToNextTab()<CR>
 nnoremap <A-,> :call MoveToPrevTab()<CR>
