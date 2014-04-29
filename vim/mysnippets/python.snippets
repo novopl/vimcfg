@@ -335,56 +335,70 @@ endsnippet
 global !p
 
 import re
+kLineWidth    = 79
+kPythonIndent = 4
+kIndent				= ' '*kPythonIndent
 kCamel2Words  = re.compile('((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))')
 kC2WFirstCap	= re.compile('(.)([A-Z][a-z]+)')
 kC2WSecondCap = re.compile('(.)([A-Z][a-z]+)')
+
 def camel2words( string ):
 	return kCamel2Words.sub(r',\1', string ).lower().split(',')
+
+def cond(snip, cond, val, default=''):
+	snip.rv = val if cond else default
+
 
 endglobal
 
 snippet sep "separator" b
-`!p snip.rv = '#{0}//'.format( '-'*(77-len(snip.indent) ) )`$0
+`!p snip.rv = '#{0}//'.format( '-'*((kLineWidth-3)-len(snip.indent) ) )`$0
 endsnippet
 
 snippet _sep "fold closing separator" b
-`!p snip.rv = '#}}}' + '{0}//'.format( '-'*(74-len(snip.indent) ) )`$0
+`!p snip.rv = '#}}}' + '{0}//'.format( '-'*((kLineWidth-6)-len(snip.indent) ) )`$0
 endsnippet
 
 snippet dsep "double separator" b
-`!p snip.rv = '#{0}'.format( '='*(79-len(snip.indent) ) )`$0
+`!p snip.rv = '#{0}'.format( '='*((kLineWidth-1)-len(snip.indent) ) )`$0
 endsnippet
 
 snippet _dsep "fold closing double separator" b
-`!p snip.rv = '#}}}' + '{0}'.format( '='*(76-len(snip.indent) ) )`$0
+`!p snip.rv = '#}}}' + '{0}'.format( '='*((kLineWidth-4)-len(snip.indent) ) )`$0
 endsnippet
 
 snippet class "class definition" b
-`!p snip.rv = '#{0}'.format( '='*(79-len(snip.indent) ) )`
-class ${1:MyClass}(${2:object}):
-	"""${3:`!p snip.rv=' '.join( camel2words(t[1]) )`}
-	"""
-	$0
+class ${1:MyClass}(${2:object}):`!p cond(snip, t[3], '\n{0}""" '.format(kIndent))
+`${3:`!p snip.rv=' '.join( camel2words(t[1]) )`}`!p cond( snip, t[3], ' """' )`
+	${0:pass}
 endsnippet
 
-snippet def "function with docstrings" b
+snippet def "function with docstring" b
 def ${1:function}(`!p
 if snip.indent:
-	snip.rv = 'self' + (", " if len(t[2]) else "")`${2:arg1}): #{{{
-	`!p snip.rv = tripple_quotes(snip)`${4:@todo: Docstring for $1.}`!p
-snip.rv = ""
-snip >> 1
-
-args = get_args(t[2])
-if args:
-	write_docstring_args(args, snip)
-
-style = get_style(snip)
-snip += format_return(style)
-snip += tripple_quotes(snip) `
+	snip.rv = 'self' + (', ' if len(t[2]) else '')`${2:arg1}):`!p
+cond( snip, t[4], '\n{0}{1}""" '.format(snip.indent, kIndent) )
+	`${4:@todo: Docstring for $1 }`!p cond(snip, t[4], '"""')`
 	${0:pass}
-`!p snip.rv = '#}}}' + '{0}//'.format( '-'*(74-len(snip.indent) ) )`
 endsnippet
+
+#snippet def "function with docstrings" b
+#def ${1:function}(`!p
+#if snip.indent:
+#	snip.rv = 'self' + (", " if len(t[2]) else "")`${2:arg1}): #{{{
+#	`!p snip.rv = tripple_quotes(snip)`${4:@todo: Docstring for $1.}`!p
+#snip.rv = ""
+#snip >> 1
+#
+#args = get_args(t[2])
+#if args:
+#	write_docstring_args(args, snip)
+#
+#style = get_style(snip)
+#snip += format_return(style)
+#snip += tripple_quotes(snip) `
+#	${0:pass}
+#endsnippet
 
 snippet cdef "classmethod with docstrings" b
 @classmethod #{{{ $1( `!p
@@ -406,6 +420,11 @@ snip += format_return(style)
 snip += tripple_quotes(snip) `
 	${0:pass}
 `!p snip.rv = '#}}}' + '{0}//'.format( '-'*(74-len(snip.indent) ) )`
+endsnippet
+
+snippet test "Unit test" b
+def test__${1:function}__${2:Scenario}_${3:Result}(self):
+	${0:${4:pass}}
 endsnippet
 
 #####################

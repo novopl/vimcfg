@@ -1,13 +1,21 @@
 
 call pathogen#infect()
 call pathogen#helptags()
+"set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
 
 filetype off
 syntax on
 filetype plugin indent on
 
+
 "{{{ Settings
 colorscheme molokai-novo
+
+" Highlight columns past 80
+"let &colorcolumn=join(range(81,999),",")
+let &colorcolumn="81,82"
+"hi ColorColumn     ctermbg=235 guibg=#2c2d27
+
 " Indents
 set tabstop=2
 set shiftwidth=2
@@ -32,10 +40,22 @@ set number
 "}}}
 
 "{{{ Plugin conf
+let g:gitgutter_sign_column_always=1
 let g:UltiSnipsSnippetDirectories=["mysnippets"]
 let g:utlisnips_python_style='sphinx'
-let g:jedi#use_tabs_not_buffers=0
+"let g:jedi#use_tabs_not_buffers=0
 let g:pydiction_location='~/.vim/bundle/pydyction/complete-dict'
+let g:syntastic_python_checkers=['flake8']
+" E265 - require comment to start with '# '
+" E221 - Multiple spaces before the operator
+" E241 - Multiple spaces after :
+" E251 - Unexpected spaces around keyword / parameter equals 
+" E271 - Multiple spaces after keyword
+" E272 - Multiple spaces before keyword
+" E702 - Multiple statements on one line
+" W391 - Blank line at the end of file
+" F821 - Undefined name
+let g:syntastic_python_flake8_args='--ignore=E265,E221,E241,E251,E702,W391,F821'
 let g:ycm_path_to_python_interpreter = '/usr/bin/python2'
 let g:tagbar_width=36
 let g:tagbar_singlelick=1
@@ -46,6 +66,7 @@ let g:tagbar_autoclose=1
 let NERDTreeWinSize=24
 let NERDTreeIgnore=['swp', '\~$', 'kdev4$', '\.pyc$']
 let NERDTreeMouseMode=2
+let g:toggle_list_no_mappings=1
 "}}}
 
 "{{{ gvim
@@ -59,11 +80,19 @@ let Tlist_Use_Right_Window = 1
 map <F1>  :!docbuild<CR>
 map <F2>  :NERDTreeToggle<CR>
 map <F3>  :TagbarToggle<CR>
-map <F10> :qa<CR>
-map <Leader>g   :grep -nIR 
+map <C-F10> :qa<CR>
+map <Leader>gn      :grep -nIR 
+map <Leader>nt      :call TODO_add()<CR>
+map <Leader>vt      :tabnew TODO<CR>
+"map <Leader>dt      :call TODO_done()<CR>
+map <Leader>dt      ^r+
+map <Leader>ct      :call TODO_clear_complete()<CR>
+map <Leader>find    :call SearchProject()<CR>
 " Shortcuts
-map <Leader>v   :vsp<CR>
-map <Leader>s   :shell<CR>
+map <Leader>v       :vsp<CR>
+map <Leader>s       :shell<CR>
+map <Leader>wrap    :set textwidth=80<CR>
+map <Leader>nowrap  :set textwidth=0<CR>
 " Quick fixes
 map <Leader>isk :set iskeyword=@,48-57,_,192-255
 map <Leader>fix :call FixTabs()<CR>
@@ -109,18 +138,6 @@ map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 "}}}
 
-"{{{ Android related functions
-:fu! Android_proj_build()
-  :!ant debug
-:endfunction
-:fu! Android_proj_upload()
-  :!adb install -r bin/*-debug.apk
-:endfunction
-:fu! Android_proj_log()
-  :!adb shell logcat | grep "^[IVDE]/$(basename $(pwd))"
-:endfunction
-"}}}
-
 fu! ToggleNumbers() "{{{
   if getwinvar( winnr(), '&modifiable' )
     set nu!
@@ -128,33 +145,99 @@ fu! ToggleNumbers() "{{{
 endfunction
 "}}}
 
-fu! FixTabs() "{{{
-  set shiftwidth=2
-  set tabstop=2
-  set softtabstop=2
+fu! SearchProject() "{{{
+  let regexp=input("Search project: ")
+  execute "Ggrep ".l:regexp
+  lw
+endfu
+"}}}
+
+
+fu! TODO_add() "{{{
+  let todo=input("TODO: ")
+  if !empty(todo)
+    let todo='- '.todo
+
+    if filereadable('TODO')
+      let fcontents=readfile('TODO', 'b')
+      if !empty(fcontents) && empty(fcontents[-1])
+        call remove(fcontents, -1)
+      endif
+      let lines = fcontents+[todo]
+    else
+      let lines = [todo]
+    endif
+
+    call writefile(lines, 'TODO', 'b')
+  endif
+endfu
+"}}}
+
+fu! TODO_done() "{{{
+  execute('^r+w')
 endfunction
 "}}}
 
-"{{{ Sessions
-"set sessionoptions=blank,buffers,curdir,folds,globals,help,localoptions,resize,tabpages,winsize,winpos
-"set sessionoptions-=options
+fu! TODO_clear_complete() "{{{
+python << EOF
+import vim
+from os.path import basename
+
+fileName = basename(vim.current.buffer.name)
+if fileName == 'TODO':
+  iscompl   = lambda l: l.strip().startswith('+')
+  toRemove  = [i for i,l in enumerate(vim.current.buffer) if iscompl(l)]
+  for i in reversed(toRemove):
+    del vim.current.buffer[i]
+  print('Completed items have been removed')
+else:
+  print('{0} is not a TODO. Aborting.'.format(fileName))
+
+EOF
+  w
+endfunction
 "}}}
+"
+
+fu! FixTabs() "{{{
+  let l:width=input("Tab width: ")
+  execute "set shiftwidth=".l:width
+  execute "set tabstop=".l:width
+  execute "set softtabstop=".l:width
+endfunction
+"}}}
+
+fu! LoadLocal() "{{{
+  echo "Checking for local settings"
+  if filereadable( "local.vim" )
+    source local.vim
+  endif
+endfunction
+"}}}
+
+
+
 
 "{{{ Autocommands
 au BufReadPost * :call CustomModeLine("vimex:")
 
+" Change colorcolumn for python files (to conform with pep8)
+au FileType python let &colorcolumn="80,81"
+
+
 " Closetag only on markup languages
 autocmd FileType html,htmldjango,jinjahtml,eruby,mako let b:closetag_html_style=1
 autocmd FileType html,xhtml,xml,htmldjango,jinjahtml,eruby,mako source ~/.vim/bundle/closetag/plugin/closetag.vim
+
 " Remove docstring preview on completion
 autocmd FileType * setlocal completeopt-=preview
+
 " Save view for folding
 au BufWinLeave * mkview
 au BufWinEnter *.* silent loadview
+
 " Detect environment
-au VimEnter * :call Env_nweb_detect()
-au VimEnter * :call Env_cmake_detect()
-au VimEnter * :call Env_local_detect()
+au VimEnter * :call LoadLocal()
 
 " Highlight extra whitespace at the end of the line
 autocmd InsertEnter * syn clear EOLWS | syn match EOLWS excludenl /\s\+\%#\@!$/
@@ -177,78 +260,4 @@ function! CustomModeLine(cid)
 endfunction
 "}}}
 
-"{{{ ENVIRONMENTS
 
-" Android environment
-:fu! SetEnv_android()
-  :noremap <F5> :call Android_proj_build()<CR>
-  :noremap <F6> :call Android_proj_upload()<CR>
-  :noremap <F7> :call Android_proj_log()<CR>
-  :echo "Android environment"
-:endfunction
-
-" Arduino environment
-:fu! SetEnv_arduino()
-  :noremap <F5> :make<CR>
-  :noremap <F6> :make upload<CR>
-  :noremap <F7> :!arduino-serial-mon<CR>
-  autocmd! BufNewFile,BufRead *.cpp setlocal ft=arduino
-  :echo "Arduino environment"
-:endfunction
-
-" C++ environment
-fu! SetEnv_cpp()
-  map <F4> :!make -j4 -C build -s clean<CR>
-  map <F5> :!make -j4 -C build -s<CR>
-endfunction
-
-fu! Env_cmake_bootstrap()
-  map <F5> :!make -j4 -C build -s<CR>
-  map <S-F5> :!make -j4 -C build -s clean<CR>
-  echo "cmake environment"
-endfunction
-
-fu! Env_cmake_detect()
- if filereadable( glob("CMakeLists.txt") )
-   call Env_cmake_bootstrap()
- endif
-endfunction
-
-" Python environment
- :fu! SetEnv_python()
-" Find a way to get the name of the module to call. It should
-" be the name of the parent directory with .py extension
-    :nnoremap <F5> :!./app.py<CR>
-    :nnoremap <F8> :!./main.py<CR>
-    :au BufRead *.py :set iskeyword=@,48-57,_,192-255
-    :echo "Python environment"
- :endfunction
-
-
-" nweb environment
-
-" Bootstrap nweb environtment
-function! Env_nweb_bootstrap()
-  let g:pydiction_location='~/.vim/pydyction-dict'
-  au BufRead *.py :set iskeyword=@,48-57,_,192-255
-  noremap <F5> :!nwman collect<CR>
-  noremap <F6> :!nwman test<CR>
-  echo "nweb environment"
-endfunction
-
-function! Env_nweb_detect()
-  echo "Checking for nweb"
-  if filereadable( glob("*.nwman") )
-    call Env_nweb_bootstrap()
-  endif
-endfunction
-
-" local environment
-function! Env_local_detect()
-  echo "Checking for local settings"
-  if filereadable( "local.vim" )
-    source local.vim
-  endif
-endfunction
-
-"}}}

@@ -34,6 +34,14 @@ ${VISUAL}
 {% endraw %}
 endsnippet
 
+snippet <!{ "Fold start" i
+<!--\{\{\{$1--
+endsnippet
+
+snippet <!} "Fold end" i
+<!--\}\}\}--
+endsnippet
+
 snippet div "XHTML <div> " w
 <div`!p
 snip.rv = ' class="' if t[1] else ''
@@ -116,6 +124,24 @@ snippet ng-abtn "<a> button with image" b
 snip.rv='"></i>&nbsp;' if t[3] else ''
 	`${4:label}
 </a>
+endsnippet
+
+snippet ng-rep "Repeat tag" b
+<$1`!p
+snip.rv=' class="' if t[2] else ''
+`${2:class}`!p 
+snip.rv='"' if t[2] else ''
+` ng-repeat="${3:items}"$4>
+	$0
+</$1>
+endsnippet
+
+snippet _ng-rep "Repeat inline tag" b
+<$1`!p
+snip.rv=' class="' if t[2] else ''
+`${2:class}`!p 
+snip.rv='"' if t[2] else ''
+` ng-repeat="${3:items}"$4>$0</$1>
 endsnippet
 
 

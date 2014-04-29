@@ -25,37 +25,45 @@ endsnippet
 snippet ng-ctrl "AngularJS controller" b
 `!p snip.rv = '#' + '{0}'.format( '='*(79-len(snip.indent) ) )`
 mod.controller '${1:ControllerName}', [ #{{{
-  '\$scope', '\$log',$2`!p snip.rv=',' if t[2] else ''`
+	'\$scope', '\$log',$2`!p snip.rv=',' if t[2] else ''`
 (\$scope, \$log`!p snip.rv=',' if t[2] else ''`${2/'//g}) ->
-	$0
-  \$scope.notify.loading = false
+	angular.extend \$scope, {
+		$0
+	}
+	\$scope.notify.loading = false
 ]#}}}
+
+
 endsnippet
 
 snippet ng-dir "AngularJS directive" b
 `!p snip.rv = '#' + '{0}'.format( '='*(79-len(snip.indent) ) )`
 mod.directive '${1:myDirective}', [#{{{
-  '\$log', '\$parse',$2`!p snip.rv=',' if t[2] else ''`
+	'\$log', '\$parse',$2`!p snip.rv=',' if t[2] else ''`
 (\$log, \$parse`!p snip.rv=',' if t[2] else ''`${2/'//g}) ->
-  return {
-    restrict:   '${3:A}'
-    replace:    '${4:false}'
-    scope:
-      $5:      '=$1'
-    templateUrl:  '/directives/$6'
-    link: (\$scope, \$elem, \$attrs) ->
+	return {
+		restrict:   '${3:A}'
+		replace:    '${4:false}'
+		scope:
+			$5:      '=$1'
+		templateUrl:  '/directives/$6'
+		link: (\$scope, \$elem, \$attrs) ->
 			$0
-  }
+	}
 ]#}}}
+
+
 endsnippet
 
 snippet ng-service "AngularJS service" b
 `!p snip.rv = '#' + '{0}'.format( '='*(79-len(snip.indent) ) )`
 mod.factory '${1:MyService}', [ #{{{
-  '\$log', '\$q', '\$http',$2`!p snip.rv=',' if t[2] else ''`
+	'\$log', '\$q', '\$http',$2`!p snip.rv=',' if t[2] else ''`
 (\$log, \$q, \$http`!p snip.rv=',' if t[2] else ''`${2/'//g} ) ->
-    return new nwebjs.AuthService($q, $http)
+		return new nwebjs.AuthService($q, $http)
 ]#}}}
+
+
 endsnippet
 
 snippet ng-state "angular-ui-router state" b
@@ -67,6 +75,15 @@ snippet ng-state "angular-ui-router state" b
 				controller: "${4:controller}"
 				templateUrl: "views/${5:template}"
 )#}}}
+endsnippet
+
+snippet ng-flt "AngularJS filter" b
+`!p snip.rv = '#' + '{0}'.format( '='*(79-len(snip.indent) ) )`
+mod.filter '${1:myFilter}', [`!p snip.rv=' ' if t[2] else ''`$2 #{{{
+`!p snip.rv='(' if t[2] else ''`${2/'//g}`!p snip.rv=') ' if t[2] else ''`->
+	return (${3:value}) ->
+		$0
+]#}}}
 endsnippet
 
 snippet mfun "Function (member)" b

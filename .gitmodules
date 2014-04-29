@@ -70,3 +70,9 @@
 [submodule "plugins/ultisnips"]
 	path = plugins/ultisnips
 	url = git://github.com/SirVer/ultisnips
+[submodule "plugins/powerline"]
+	path = plugins/powerline
+	url = git://github.com/Lokaltog/powerline
+[submodule "plugins/git-gutter"]
+	path = plugins/git-gutter
+	url = git://github.com/airblade/vim-gitgutter.git

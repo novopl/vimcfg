@@ -106,6 +106,7 @@ hi VisualNOS                     guibg=#403D3D
 hi Visual                        guibg=#403D3D
 hi WarningMsg      guifg=#FFFFFF guibg=#333333 gui=bold
 hi WildMenu        guifg=#66D9EF guibg=#000000
+hi ColorColumn     ctermbg=235 guibg=#2c2d27
 
 if s:molokai_original == 1
    hi Normal          guifg=#F8F8F2 guibg=#272822
