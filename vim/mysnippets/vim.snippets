@@ -1,5 +1,40 @@
 priority -50
 
+#################
+#  My Snippets  #
+#################
+
+global !p
+import vim
+import re
+try:
+		kLineWidth = int(vim.eval('&colorcolumn').split(',')[0]) - 1
+except:
+		kLineWidth = 79
+
+kPythonIndent = 4
+kIndent				= ' '*kPythonIndent
+kCamel2Words  = re.compile('((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))')
+kC2WFirstCap	= re.compile('(.)([A-Z][a-z]+)')
+kC2WSecondCap = re.compile('(.)([A-Z][a-z]+)')
+
+def camel2words( string ):
+	return kCamel2Words.sub(r',\1', string ).lower().split(',')
+
+def cond(snip, cond, val, default=''):
+	snip.rv = val if cond else default
+
+
+endglobal
+
+snippet sep "separator" b
+`!p snip.rv = '"{0}//'.format( '-'*((kLineWidth-3)-len(snip.indent) ) )`$0
+endsnippet
+
+snippet dsep "double separator" b
+`!p snip.rv = '"{0}'.format( '='*((kLineWidth-1)-len(snip.indent) ) )`$0
+endsnippet
+
 ###########################################################################
 #                            SnipMate Snippets                            #
 ###########################################################################

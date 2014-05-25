@@ -53,13 +53,13 @@ snip.rv = '"' if t[1] else ''
 $0
 endsnippet
 
-snippet "([a-z]+) ([\S ]+)" "<tag class=> " br
+snippet "([a-z][a-z0-9]*) ([\S ]+)" "<tag class=> " br
 <`!p snip.rv = match.group(1)` class="`!p snip.rv = match.group(2)`">
 	$0
 </`!p snip.rv = match.group(1)`>
 endsnippet
 
-snippet "_([a-z]+) ([\S ]+)" "Inline <tag class=> " r
+snippet "_([a-z][a-z0-9]*) ([\S ]+)" "Inline <tag class=> " r
 <`!p snip.rv = match.group(1)` class="`!p snip.rv = match.group(2)`">$0</`!p snip.rv = match.group(1)`>
 endsnippet
 

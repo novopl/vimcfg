@@ -333,9 +333,13 @@ endsnippet
 
 
 global !p
-
+import vim
 import re
-kLineWidth    = 79
+try:
+		kLineWidth = int(vim.eval('&colorcolumn').split(',')[0]) - 1
+except:
+		kLineWidth = 79
+
 kPythonIndent = 4
 kIndent				= ' '*kPythonIndent
 kCamel2Words  = re.compile('((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))')
