@@ -136,12 +136,19 @@ fu! ToggleNumbers() "{{{
 endfunction
 "}}}
 
-fu! SearchProject() "{{{
-  let regexp=input("Search project: ")
-  execute "Ggrep ".l:regexp
-  lw
+"----------------------------------------------------------------------------//
+fu! SearchProject()
+  let regexp=input("Search project (using ack): ")
+  let args=''
+
+  
+  if exists('g:search_ignore_dir')
+    let diropt=' --ignore-directory=is:'
+    let args=diropt.join(g:search_ignore_dir, diropt)
+  endif
+
+  execute ":!ack '".l:regexp."' ".l:args
 endfu
-"}}}
 
 
 "-----------------------------------------------------------------------------//
