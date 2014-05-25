@@ -84,7 +84,7 @@ endif
 
 
 let Tlist_Use_Right_Window = 1
-map <F1>  :!docbuild<CR>
+map <F1>    :call RunDoctests()<CR>
 map <F2>    :NERDTreeToggle<CR>
 map <F3>    :TagbarToggle<CR>
 map <Leader>nt      :call TODO_add()<CR>
@@ -129,12 +129,49 @@ nnoremap <A-,> :call MoveToPrevTab()<CR>
 map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
 
-fu! ToggleNumbers() "{{{
+
+"""""""""""""""
+"  Functions  "
+"""""""""""""""
+
+
+"----------------------------------------------------------------------------//
+fu! RunDoctests()
+    let out     = []
+    let failed  = 0
+    echom 'Running doctests..'
+    for fpath in g:doctests
+        "execute 'silent !./icanhaz doctest '.fpath
+        let ret = system('./icanhaz doctest '.fpath)
+        if v:shell_error == 0
+            echom '-- '.fpath.'..ok'
+            call add(out, '-- '.fpath.'..ok')
+        else
+            let failed = 1
+            echom '-- '.fpath.'..failed'
+            call add(out, '-- '.fpath.'..failed')
+            call add(out, ' ')
+            for line in split(l:ret, '\n')
+                call add(out, ' >   '.line)
+            endfor
+            call add(out, ' ')
+        endif
+    endfor
+
+    if failed
+        redraw!
+        for line in out
+            echom line
+        endfor
+    endif
+endfu
+
+"-----------------------------------------------------------------------------//
+fu! ToggleNumbers()
   if getwinvar( winnr(), '&modifiable' )
     set nu!
   endif
 endfunction
-"}}}
 
 "----------------------------------------------------------------------------//
 fu! SearchProject()
