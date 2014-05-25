@@ -8,18 +8,18 @@ syntax on
 filetype plugin indent on
 
 
-"{{{ Settings
-colorscheme molokai-novo
+""""""""""""""
+"  Settings  "
+""""""""""""""
 
-" Highlight columns past 80
-"let &colorcolumn=join(range(81,999),",")
-let &colorcolumn="81,82"
-"hi ColorColumn     ctermbg=235 guibg=#2c2d27
+
+colorscheme molokai-novo
+let &colorcolumn="80,81"
 
 " Indents
-set tabstop=2
-set shiftwidth=2
-set softtabstop=2
+set tabstop=4
+set shiftwidth=4
+set softtabstop=4
 set expandtab
 set autoindent
 " Mouse
@@ -37,9 +37,13 @@ set encoding=utf-8
 let mapleader = ","
 set hlsearch
 set number
-"}}}
 
-"{{{ Plugin conf
+
+"""""""""""""""""""""""""""
+"  Plugins configuration  "
+"""""""""""""""""""""""""""
+
+
 let g:gitgutter_sign_column_always=1
 let g:UltiSnipsSnippetDirectories=["mysnippets"]
 let g:utlisnips_python_style='sphinx'
@@ -67,27 +71,29 @@ let NERDTreeWinSize=24
 let NERDTreeIgnore=['swp', '\~$', 'kdev4$', '\.pyc$']
 let NERDTreeMouseMode=2
 let g:toggle_list_no_mappings=1
-"}}}
 
-"{{{ gvim
+" gvim
 if has("gui_running")
   set guifont=Monospace\ 7
 endif
-"}}}
 
-"{{{ Mapping
+
+""""""""""""""
+"  Mappings  "
+""""""""""""""
+
+
 let Tlist_Use_Right_Window = 1
 map <F1>  :!docbuild<CR>
-map <F2>  :NERDTreeToggle<CR>
-map <F3>  :TagbarToggle<CR>
-map <C-F10> :qa<CR>
-map <Leader>gn      :grep -nIR 
+map <F2>    :NERDTreeToggle<CR>
+map <F3>    :TagbarToggle<CR>
 map <Leader>nt      :call TODO_add()<CR>
 map <Leader>vt      :tabnew TODO<CR>
 "map <Leader>dt      :call TODO_done()<CR>
 map <Leader>dt      ^r+
 map <Leader>ct      :call TODO_clear_complete()<CR>
 map <Leader>find    :call SearchProject()<CR>
+map <Leader>a       :call SearchProject()<CR>
 " Shortcuts
 map <Leader>v       :vsp<CR>
 map <Leader>s       :shell<CR>
@@ -96,47 +102,32 @@ map <Leader>nowrap  :set textwidth=0<CR>
 " Quick fixes
 map <Leader>isk :set iskeyword=@,48-57,_,192-255
 map <Leader>fix :call FixTabs()<CR>
-" Folding
-nnoremap <Leader>f  za 
-nnoremap <Leader>F  zA 
 " Git mappings
 map <Leader>c       :call ToggleQuickfixList()<CR>
 map <Leader>w       :wa<CR>
-map <Leader>q       :q<CR>
-map <Leader>qa      :qa<CR>
 map <Leader>gl      :Glog<CR>:cw<CR>
 map <Leader>Gl      :Glog --<CR>:cw<CR>
 map <Leader>gs      :Gstatus<CR>
-map <Leader>gw      :Gwrite<CR>
-map <Leader>gr      :Gread<CR>
 map <Leader>gd      :Gdiff<CR>
 map <Leader>ge      :Gedit<CR>
 map <Leader>gpush   :Git push<CR>
 map <Leader>gpull   :Git pull<CR>
 map <Leader>qg      :!qgit4<CR><CR>
 map <Leader>nu      :windo call ToggleNumbers()<CR>
-map <Leader>gcommit :!git commit<CR>
 map <Leader>gpush   :!git push<CR>
 map <Leader>l       gt
-map <Leader>h       gT
+noremap <S-t>       gT
 " View switching
 noremap <C-h> <C-w>h
 noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
-noremap <S-t> gt
 " Window movement
 nnoremap <A-.> :call MoveToNextTab()<CR>
 nnoremap <A-,> :call MoveToPrevTab()<CR>
-" Switch between different environments
-noremap <Leader>nw :call SetEnv_nweb()<CR>
-noremap <Leader>an :call SetEnv_android()<CR>
-noremap <Leader>uc :call SetEnv_arduino()<CR>
-noremap <Leader>py :call SetEnv_python()<CR>
 " ctags
 map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
 map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
-"}}}
 
 fu! ToggleNumbers() "{{{
   if getwinvar( winnr(), '&modifiable' )
@@ -153,7 +144,8 @@ endfu
 "}}}
 
 
-fu! TODO_add() "{{{
+"-----------------------------------------------------------------------------//
+fu! TODO_add()
   let todo=input("TODO: ")
   if !empty(todo)
     let todo='- '.todo
@@ -171,14 +163,14 @@ fu! TODO_add() "{{{
     call writefile(lines, 'TODO', 'b')
   endif
 endfu
-"}}}
 
-fu! TODO_done() "{{{
+"-----------------------------------------------------------------------------//
+fu! TODO_done()
   execute('^r+w')
 endfunction
-"}}}
 
-fu! TODO_clear_complete() "{{{
+"-----------------------------------------------------------------------------//
+fu! TODO_clear_complete()
 python << EOF
 import vim
 from os.path import basename
@@ -196,29 +188,29 @@ else:
 EOF
   w
 endfunction
-"}}}
-"
 
-fu! FixTabs() "{{{
+"-----------------------------------------------------------------------------//
+fu! FixTabs()
   let l:width=input("Tab width: ")
   execute "set shiftwidth=".l:width
   execute "set tabstop=".l:width
   execute "set softtabstop=".l:width
 endfunction
-"}}}
 
-fu! LoadLocal() "{{{
+"-----------------------------------------------------------------------------//
+fu! LoadLocal()
   echo "Checking for local settings"
   if filereadable( "local.vim" )
     source local.vim
   endif
 endfunction
-"}}}
 
 
+""""""""""""""""""
+"  Autocommands  "
+""""""""""""""""""
 
 
-"{{{ Autocommands
 au BufReadPost * :call CustomModeLine("vimex:")
 
 " Change colorcolumn for python files (to conform with pep8)
@@ -243,9 +235,11 @@ au VimEnter * :call LoadLocal()
 autocmd InsertEnter * syn clear EOLWS | syn match EOLWS excludenl /\s\+\%#\@!$/
 autocmd InsertLeave * syn clear EOLWS | syn match EOLWS excludenl /\s\+$/
 highlight EOLWS ctermbg=red guibg=red
-"}}}
 
-"{{{ BIES MAKRO
+
+
+"-----------------------------------------------------------------------------//
+" BIES MAKRO
 function! CustomModeLine(cid)
 	let i = &modelines
 	let lln = line("$")
