@@ -336,21 +336,30 @@ global !p
 import vim
 import re
 try:
-		kLineWidth = int(vim.eval('&colorcolumn').split(',')[0]) - 1
+	kLineWidth = int(vim.eval('&colorcolumn').split(',')[0]) - 1
 except:
-		kLineWidth = 79
+	kLineWidth = 79
 
-kPythonIndent = 4
-kIndent				= ' '*kPythonIndent
-kCamel2Words  = re.compile('((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))')
+kPythonIndent	= int(vim.eval('&softtabstop')) # 4
+kIndent			= ' '*kPythonIndent
+kCamel2Words	= re.compile('((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))')
 kC2WFirstCap	= re.compile('(.)([A-Z][a-z]+)')
-kC2WSecondCap = re.compile('(.)([A-Z][a-z]+)')
+kC2WSecondCap	= re.compile('(.)([A-Z][a-z]+)')
 
-def camel2words( string ):
+def camel2words(string):
 	return kCamel2Words.sub(r',\1', string ).lower().split(',')
 
 def cond(snip, cond, val, default=''):
 	snip.rv = val if cond else default
+
+def under2words(string):
+	return string.split('_')
+
+def camel2sentence(string):
+	return ' '.join(camel2words(string)).capitalize()
+
+def under2sentence(string):
+	return ' '.join(under2words(string)).capitalize()
 
 
 endglobal
@@ -373,7 +382,7 @@ endsnippet
 
 snippet class "class definition" b
 class ${1:MyClass}(${2:object}):`!p cond(snip, t[3], '\n{0}""" '.format(kIndent))
-`${3:`!p snip.rv=' '.join( camel2words(t[1]) )`}`!p cond( snip, t[3], ' """' )`
+`${3:`!p snip.rv=camel2sentence(t[1])`}`!p cond( snip, t[3], ' """' )`
 	${0:pass}
 endsnippet
 
@@ -385,24 +394,6 @@ cond( snip, t[4], '\n{0}{1}""" '.format(snip.indent, kIndent) )
 	`${4:@todo: Docstring for $1 }`!p cond(snip, t[4], '"""')`
 	${0:pass}
 endsnippet
-
-#snippet def "function with docstrings" b
-#def ${1:function}(`!p
-#if snip.indent:
-#	snip.rv = 'self' + (", " if len(t[2]) else "")`${2:arg1}): #{{{
-#	`!p snip.rv = tripple_quotes(snip)`${4:@todo: Docstring for $1.}`!p
-#snip.rv = ""
-#snip >> 1
-#
-#args = get_args(t[2])
-#if args:
-#	write_docstring_args(args, snip)
-#
-#style = get_style(snip)
-#snip += format_return(style)
-#snip += tripple_quotes(snip) `
-#	${0:pass}
-#endsnippet
 
 snippet cdef "classmethod with docstrings" b
 @classmethod #{{{ $1( `!p
@@ -426,10 +417,106 @@ snip += tripple_quotes(snip) `
 `!p snip.rv = '#}}}' + '{0}//'.format( '-'*(74-len(snip.indent) ) )`
 endsnippet
 
-snippet test "Unit test" b
-def test__${1:function}__${2:Scenario}_${3:Result}(self):
-	${0:${4:pass}}
+###############
+#  Shortcuts  #
+###############
+
+snippet jsobj "New jsobj" w
+JsObj({
+	${1:members}
+})
 endsnippet
+
+snippet gendict "dict from generator" w
+dict(
+	(${1:key}, ${2:value}) for ${3:item} in ${4:collection}
+)
+endsnippet
+
+snippet _gendict "inline dict from generator" w
+dict((${1:key}, ${2:value}) for ${3:item} in ${4:collection})
+endsnippet
+
+
+###############
+#  Debugging  #
+###############
+
+snippet tb "Print traceback" b
+import tracaback; traceback.print_exc()
+endsnippet
+
+snippet ltb "Print traceback" b
+import traceback; logging.error(traceback.format_exc())
+endsnippet
+
+snippet pdb "Set PDB breakpoint" b
+import pdb; pdb.set_trace()
+endsnippet
+
+snippet ipdb "Set IPDB breakpoint" b
+import ipdb; ipdb.set_trace()
+endsnippet
+
+#########
+#  TDD  #
+#########
+
+snippet test "Unit test" b
+def test__${1:what}__${2:desc}(self):`!p cond(snip, t[3], '\n{0}""" '.format(snip.indent+kIndent))
+`${3:`!p snip.rv=under2sentence(t[2])`}`!p cond( snip, t[3], '. """' )`
+	${0:pass}
+endsnippet
+
+snippet aeq "assertEqual" b
+self.assertEqual($1, $2)$0
+endsnippet
+
+snippet aaeq "Assert almost equal" b
+self.assertAlmostEqual(${1:first},${2:second})
+endsnippet
+
+snippet aneq "assert Not Equal" b
+self.assertNotEqual($1, $2)$0
+endsnippet
+
+snippet ain "Assert In" b
+self.assertIn(${1:what}, ${2:where})$0
+endsnippet
+
+snippet anin "Assert Not In" b
+self.assertNotIn(${1:what}, ${2:where})$0
+endsnippet
+
+snippet atrue "Assert True" b
+self.assertTrue(${1:condition})$0
+endsnippet
+
+snippet afalse "Assert False" b
+self.assertFalse(${1:condition})$0
+endsnippet
+
+snippet araises "Assert Raises" b
+with self.assertRaises(${1:Exception}):
+	${0:pass}
+endsnippet
+
+snippet anone "Assert Is None" b
+self.assertIsNone(${1:instance})$0
+endsnippet
+
+snippet anotnone "Assert Is Not None" b
+self.assertIsNotNone(${1:instance})$0
+endsnippet
+
+snippet ainst "Assert Is Instance" b
+self.assertIsInstance(${1:obj}, ${2:cls})$0
+endsnippet
+
+snippet anotinst "Assert Not Is Instance" b
+self.assertNotIsInstance(${1:obj}, ${2:cls})$0
+endsnippet
+
 
 #####################
 #  End my snippets  #
@@ -549,38 +636,9 @@ endsnippet
 # Assertions & Tests #
 #####################
 
-snippet pdb "Set PDB breakpoint" b
-import pdb; pdb.set_trace()
-endsnippet
-
-snippet ipdb "Set IPDB breakpoint" b
-import ipdb; ipdb.set_trace()
-endsnippet
-
 snippet pudb "Set PUDB breakpoint" b
 import pudb; pudb.set_trace()
 endsnippet
-
-snippet ae "Assert equal" b
-self.assertEqual(${1:first},${2:second})
-endsnippet
-
-snippet at "Assert True" b
-self.assertTrue(${0:exp})
-endsnippet
-
-snippet af "Assert False" b
-self.assertFalse(${1:expression})
-endsnippet
-
-snippet aae "Assert almost equal" b
-self.assertAlmostEqual(${1:first},${2:second})
-endsnippet
-
-snippet ar "Assert raises" b
-self.assertRaises(${1:exception}, ${2:func}${3/.+/, /}${3:arguments})
-endsnippet
-
 
 snippet testcase "pyunit testcase" b
 class Test${1:Class}(${2:unittest.TestCase}):

@@ -6,20 +6,52 @@ priority -50
 # My snippets
 #===================
 
+global !p
+import vim
+import re
+try:
+	kLineWidth = int(vim.eval('&colorcolumn').split(',')[0]) - 1
+except:
+	kLineWidth = 79
+
+kPythonIndent	= int(vim.eval('&softtabstop')) # 4
+kIndent			= ' '*kPythonIndent
+kCamel2Words	= re.compile('((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))')
+kC2WFirstCap	= re.compile('(.)([A-Z][a-z]+)')
+kC2WSecondCap	= re.compile('(.)([A-Z][a-z]+)')
+
+def camel2words(string):
+	return kCamel2Words.sub(r',\1', string ).lower().split(',')
+
+def cond(snip, cond, val, default=''):
+	snip.rv = val if cond else default
+
+def under2words(string):
+	return string.split('_')
+
+def camel2sentence(string):
+	return ' '.join(camel2words(string)).capitalize()
+
+def under2sentence(string):
+	return ' '.join(under2words(string)).capitalize()
+
+
+endglobal
+
 snippet sep "separator" b
-`!p snip.rv = '#{0}//'.format( '-'*(77-len(snip.indent) ) )`$0
+`!p snip.rv = '#{0}//'.format( '-'*((kLineWidth-3)-len(snip.indent) ) )`$0
 endsnippet
 
 snippet _sep "fold closing separator" b
-`!p snip.rv = '#}}}' + '{0}//'.format( '-'*(74-len(snip.indent) ) )`$0
+`!p snip.rv = '#}}}' + '{0}//'.format( '-'*((kLineWidth-6)-len(snip.indent) ) )`$0
 endsnippet
 
 snippet dsep "double separator" b
-`!p snip.rv = '#{0}'.format( '='*(79-len(snip.indent) ) )`$0
+`!p snip.rv = '#{0}'.format( '='*((kLineWidth-1)-len(snip.indent) ) )`$0
 endsnippet
 
 snippet _dsep "fold closing double separator" b
-`!p snip.rv = '#}}}' + '{0}'.format( '='*(76-len(snip.indent) ) )`$0
+`!p snip.rv = '#}}}' + '{0}'.format( '='*((kLineWidth-4)-len(snip.indent) ) )`$0
 endsnippet
 
 snippet ng-ctrl "AngularJS controller" b

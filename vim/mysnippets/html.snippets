@@ -423,10 +423,6 @@ snippet tr "table row" w
 <tr>$0</tr>
 endsnippet
 
-snippet title "XHTML <title>" w
-<title>${1:`!p snip.rv = snip.basename or "Page Title"`}</title>
-endsnippet
-
 snippet fieldset "Fieldset" w
 <fieldset id="${1/[\w\d]+|( )/(?1:_:\L$0\E)/g}" ${2:class="${3:}"}>
 	<legend>$1</legend>
