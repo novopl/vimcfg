@@ -417,6 +417,37 @@ snip += tripple_quotes(snip) `
 `!p snip.rv = '#}}}' + '{0}//'.format( '-'*(74-len(snip.indent) ) )`
 endsnippet
 
+snippet rest-serializer "django-rest-framework serializer" b
+`!p snip.rv = '#{0}'.format( '='*((kLineWidth-1)-len(snip.indent) ) )`
+class ${1:Model}Serializer(${2:viewsets.HyperlinkedModelSerializer}):
+    class Meta:
+        model = $1
+	${0}
+endsnippet
+
+snippet rest-view "django-rest-framework ViewSet" b
+`!p snip.rv = '#{0}'.format( '='*((kLineWidth-1)-len(snip.indent) ) )`
+class ${1:Model}ViewSet(${2:ModelViewSet}):
+    class Meta:
+        model = ${1}
+	$0
+endsnippet
+
+snippet rest-endpoint "django-rest-framework endpoint" b
+`!p snip.rv = '#{0}'.format( '='*((kLineWidth-1)-len(snip.indent) ) )`
+class ${1:Model}Serializer(${2:ModelSerializer}):
+    class Meta:
+        model = $1
+
+
+`!p snip.rv = '#{0}'.format( '='*((kLineWidth-1)-len(snip.indent) ) )`
+class $1ViewSet(${3:viewsets.ModelViewSet}):
+    queryset         = $1.objects.all()
+    serializer_class = $1Serializer
+$0
+endsnippet
+
+
 ###############
 #  Shortcuts  #
 ###############

@@ -56,21 +56,20 @@ endsnippet
 
 snippet ng-ctrl "AngularJS controller" b
 `!p snip.rv = '#' + '{0}'.format( '='*(79-len(snip.indent) ) )`
-mod.controller '${1:ControllerName}', [ #{{{
+mod.controller '${1:ControllerName}', [
 	'\$scope', '\$log',$2`!p snip.rv=',' if t[2] else ''`
 (\$scope, \$log`!p snip.rv=',' if t[2] else ''`${2/'//g}) ->
 	angular.extend \$scope, {
 		$0
 	}
-	\$scope.notify.loading = false
-]#}}}
+]
 
 
 endsnippet
 
 snippet ng-dir "AngularJS directive" b
 `!p snip.rv = '#' + '{0}'.format( '='*(79-len(snip.indent) ) )`
-mod.directive '${1:myDirective}', [#{{{
+mod.directive '${1:myDirective}', [
 	'\$log', '\$parse',$2`!p snip.rv=',' if t[2] else ''`
 (\$log, \$parse`!p snip.rv=',' if t[2] else ''`${2/'//g}) ->
 	return {
@@ -82,40 +81,29 @@ mod.directive '${1:myDirective}', [#{{{
 		link: (\$scope, \$elem, \$attrs) ->
 			$0
 	}
-]#}}}
+]
 
 
 endsnippet
 
 snippet ng-service "AngularJS service" b
 `!p snip.rv = '#' + '{0}'.format( '='*(79-len(snip.indent) ) )`
-mod.factory '${1:MyService}', [ #{{{
+mod.factory '${1:MyService}', [
 	'\$log', '\$q', '\$http',$2`!p snip.rv=',' if t[2] else ''`
 (\$log, \$q, \$http`!p snip.rv=',' if t[2] else ''`${2/'//g} ) ->
 		return new nwebjs.AuthService($q, $http)
-]#}}}
+]
 
 
-endsnippet
-
-snippet ng-state "angular-ui-router state" b
-.state( #{{{ ${1:name}
-		name: "$1"
-		url:	"/`!p snip.rv=t[1].rsplit('.',1)[-1]`"
-		views:
-			"${2:view}@${3:targetView}":
-				controller: "${4:controller}"
-				templateUrl: "views/${5:template}"
-)#}}}
 endsnippet
 
 snippet ng-flt "AngularJS filter" b
 `!p snip.rv = '#' + '{0}'.format( '='*(79-len(snip.indent) ) )`
-mod.filter '${1:myFilter}', [`!p snip.rv=' ' if t[2] else ''`$2 #{{{
+mod.filter '${1:myFilter}', [`!p snip.rv=' ' if t[2] else ''`$2
 `!p snip.rv='(' if t[2] else ''`${2/'//g}`!p snip.rv=') ' if t[2] else ''`->
 	return (${3:value}) ->
 		$0
-]#}}}
+]
 endsnippet
 
 snippet mfun "Function (member)" b
@@ -123,7 +111,7 @@ ${1:name}: `!p
 snip.rv = '(' if len(t[2]) else ''
 `${2:args}`!p
 snip.rv = ') ' if len(t[2]) else ''
-`-> #{{{
+`->
 	${0:# body...}
 `!p snip.rv = '#}}}'+'{0}//'.format( '-'*(74-len(snip.indent) ) )`
 endsnippet
