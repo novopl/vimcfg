@@ -122,7 +122,7 @@ let g:tagbar_autoclose=0
 
 "----------------------------------------------------------------------------//
 " NERDTree
-let NERDTreeWinSize=24
+let NERDTreeWinSize=30
 let NERDTreeIgnore=['swp', '\~$', 'kdev4$', '\.pyc$']
 let NERDTreeMouseMode=2
 
