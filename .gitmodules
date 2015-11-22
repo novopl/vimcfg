@@ -97,3 +97,15 @@
 [submodule "plugins/conque-shell"]
 	path = plugins/conque-shell
 	url = git://github.com/vim-scripts/Conque-Shell.git
+[submodule "plugins/yajs"]
+	path = plugins/yajs
+	url = git://github.com/othree/yajs.vim
+[submodule "plugins/vim-es6"]
+	path = plugins/vim-es6
+	url = git://github.com/isRuslan/vim-es6
+[submodule "plugins/rust-vim"]
+	path = plugins/rust-vim
+	url = git://github.com/rust-lang/rust.vim
+[submodule "plugins/racer-rust"]
+	path = plugins/racer-rust
+	url = git://github.com/racer-rust/vim-racer.git
