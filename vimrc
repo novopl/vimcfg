@@ -8,6 +8,9 @@ syntax on
 filetype plugin indent on
 
 
+" Force <C-q> and <C-s> to reach the vim application
+silent !stty -ixon > /dev/null 2>/dev/null
+
 """"""""""""""
 "  Settings  "
 """"""""""""""
@@ -52,6 +55,7 @@ set relativenumber
 " E251 - Unexpected spaces around keyword / parameter equals 
 " E271 - Multiple spaces after keyword
 " E272 - Multiple spaces before keyword
+" E402 - Module level import not at the top of the file
 " E702 - Multiple statements on one line
 " E731 - Do not assign to lambda expression, use def
 " W391 - Blank line at the end of file
@@ -99,6 +103,8 @@ let g:ycm_complete_in_comments=1
 let g:ycm_always_populate_location_list = 0
 let g:ycm_filepath_completion_use_working_dir = 1
 let g:ycm_confirm_extra_conf=0
+let g:clang_library_path='~/.vim/bunlde/youcompleteme/third_party/ycmd'
+let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/youcompleteme/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 
 "----------------------------------------------------------------------------//
 " python-mode
@@ -125,7 +131,7 @@ let g:tagbar_autoclose=0
 let NERDTreeWinSize=30
 let NERDTreeIgnore=['swp', '\~$', 'kdev4$', '\.pyc$']
 let NERDTreeMouseMode=2
-let NERDTreeDirArrows=0
+let NERDTreeDirArrows=1
 
 "----------------------------------------------------------------------------//
 " Other
@@ -161,8 +167,14 @@ map <F11>   :CommandTFlush<CR>
 map <S-F11>   :CommandTFlush<CR>
 map <F12>   :so ~/.vimrc<CR>
 map <C-s>   :wa<CR>
-map <M-LeftMouse>   *@:call pymode#rope#goto_definition()<CR>
-map <C-LeftMouse>   *@:call pymode#rope#goto_definition()<CR>
+map <C-q>           :q<CR>
+
+au FileType python map <M-LeftMouse>   *@:call pymode#rope#goto_definition()<CR>
+au FileType python map <C-LeftMouse>   *@:call pymode#rope#goto_definition()<CR>
+
+au FileType cpp map <M-LeftMouse>   :YcmCompleter GoToDefinitionElseDeclaration<CR>
+au FileType cpp map <C-LeftMouse>   :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
 "map <Leader>dt      :call TODO_done()<CR>
 "map <Leader>ct      :call TODO_clear_complete()<CR>
 map <Leader>find    :call SearchProject()<CR>
@@ -179,6 +191,7 @@ map <Leader>wr      :call ChangeWrap()<CR>
 map <Leader>isk :set iskeyword=@,48-57,_,192-255
 " Git mappings
 map <Leader>c       :call ToggleQuickfixList()<CR>
+map <Leader>d       :YcmCompleter GoToDefinitionElseDeclaration<CR>
 map <Leader>gl      :Glog<CR>:cw<CR>
 map <Leader>Gl      :Glog --<CR>:cw<CR>
 map <Leader>gs      :call GitStatus()<CR> 
@@ -193,6 +206,7 @@ map <Leader>qg      :!qgit&<CR><CR>
 map <Leader>nu      :call ToggleNumbers()<CR>
 map <Leader>nc      :call ToggleLocationList()<CR>
 map <Leader>nq      :call ToggleQuickfixList()<CR>
+map <Leader>nt      :tabnew<CR>
 map <Leader>ican    :call Icanhaz()<CR>
 map <Leader>l       gt
 noremap <S-t>       gT
@@ -379,21 +393,25 @@ endfunction
 
 "----------------------------------------------------------------------------//
 fu! SearchProject()
-    let pattern=input("Search project (using ack): ")
+    let pattern=input("Search project (using ag): ")
     redraw!
     echom "Searching for '".l:pattern."'..."
     let args=''
-    let ackcmd='ack --column -H --no-heading'
+    "let ackcmd='ack --column -H --no-heading'
+    let agcmd='ag'
 
     
     if exists('g:search_ignore_dir')
-        let diropt=' --ignore-directory=is:'
+        let diropt=' --ignore-dir='
         let args=diropt.join(g:search_ignore_dir, diropt)
     endif
 
     let results = []
-    let ack_out = system(ackcmd." '".l:pattern."' ".l:args)
-    for line in split(ack_out, '\n')
+    echom "Using cmd: ".agcmd." '".l:pattern."' ".l:args
+    "let ack_out = system(ackcmd." '".l:pattern."' ".l:args)
+    let ag_out = system(l:agcmd." '".l:pattern."' ".l:args)
+    "for line in split(ack_out, '\n')
+    for line in split(ag_out, '\n')
         let parts = split(line, ':')
         if len(parts) == 4
             call add(results, {
@@ -633,6 +651,7 @@ au FileType python let &colorcolumn="80,81"
 au FileType html,htmldjango,jinjahtml,eruby,mako let b:closetag_html_style=1
 au FileType html,xhtml,xml,htmldjango,jinjahtml,eruby,mako source ~/.vim/bundle/closetag/plugin/closetag.vim
 au FileType * setlocal completeopt-=preview
+
 
 " Save view for folding
 
