@@ -25,6 +25,7 @@ set shiftwidth=4
 set softtabstop=4
 set expandtab
 set autoindent
+set backspace=indent,start,eol
 " Mouse
 set mouse=a
 set mousef
@@ -43,6 +44,9 @@ set hlsearch
 set cryptmethod=blowfish
 set number
 set relativenumber
+" Mora natural new tab on split
+set splitbelow
+set splitright
 
 
 """""""""""""""""""""""""""
