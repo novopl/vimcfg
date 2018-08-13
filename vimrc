@@ -84,10 +84,10 @@ let g:pep8_ignore=[
 
 "----------------------------------------------------------------------------//
 " UltiSnips
-let g:UltiSnipsSnippetDirectories=["mysnippets"]
-let g:utlisnips_python_style='sphinx'
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsListSnippets="<c-e>"
+" let g:UltiSnipsSnippetDirectories=["mysnippets"]
+" let g:utlisnips_python_style='sphinx'
+" let g:UltiSnipsJumpForwardTrigger="<tab>"
+" let g:UltiSnipsListSnippets="<c-e>"
 
 "----------------------------------------------------------------------------//
 " jedi-vim
@@ -585,20 +585,20 @@ endfunction
 
 "----------------------------------------------------------------------------//
 " src: http://stackoverflow.com/questions/14896327/ultisnips-and-youcompleteme
-function! g:UltiSnips_Complete()
-    call UltiSnips#ExpandSnippet()
-    if g:ulti_expand_res == 0
-        if pumvisible()
-            return "\<C-n>"
-        else
-            call UltiSnips#JumpForwards()
-            if g:ulti_jump_forwards_res == 0
-               return "\<TAB>"
-            endif
-        endif
-    endif
-    return ""
-endfunction
+" function! g:UltiSnips_Complete()
+"     call UltiSnips#ExpandSnippet()
+"     if g:ulti_expand_res == 0
+"         if pumvisible()
+"             return "\<C-n>"
+"         else
+"             call UltiSnips#JumpForwards()
+"             if g:ulti_jump_forwards_res == 0
+"                return "\<TAB>"
+"             endif
+"         endif
+"     endif
+"     return ""
+" endfunction
 
 
 "----------------------------------------------------------------------------//
@@ -645,7 +645,7 @@ endfunction
 au VimEnter * :call LoadLocal()
 au BufWinLeave * call SaveView()
 au BufWinEnter *.* silent loadview
-au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
+" au BufEnter * exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
 au BufReadPost * :call CustomModeLine("vimex:")
 au InsertEnter * syn clear EOLWS | syn match EOLWS excludenl /\s\+\%#\@!$/
 au InsertLeave * syn clear EOLWS | syn match EOLWS excludenl /\s\+$/
