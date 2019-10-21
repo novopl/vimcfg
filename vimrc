@@ -173,6 +173,15 @@ map <F12>   :so ~/.vimrc<CR>
 map <C-s>   :wa<CR>
 map <C-q>           :q<CR>
 
+" reST commands
+map <Leader>doc yyP0v$r#yyjp
+map <Leader>sec yyp0v$r=
+map <Leader>sub yyp0v$r~
+map <Leader>ssub yyp0v$r-
+
+" Helper macros
+map <Leader>wrap 080lF xi<CR><Esc>
+
 au FileType python map <M-LeftMouse>   *@:call pymode#rope#goto_definition()<CR>
 au FileType python map <C-LeftMouse>   *@:call pymode#rope#goto_definition()<CR>
 
