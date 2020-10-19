@@ -39,6 +39,8 @@ set foldlevel=1
 set completeopt=menuone,longest,preview
 set encoding=utf-8
 let mapleader = ","
+set noerrorbells
+set visualbell  " IdeaVIM does not understand noerrorbells
 "set nowrap
 set hlsearch
 set cryptmethod=blowfish
