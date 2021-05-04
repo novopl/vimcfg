@@ -666,6 +666,7 @@ au FileType python let &colorcolumn="80,81"
 au FileType html,htmldjango,jinjahtml,eruby,mako let b:closetag_html_style=1
 au FileType html,xhtml,xml,htmldjango,jinjahtml,eruby,mako source ~/.vim/bundle/closetag/plugin/closetag.vim
 au FileType * setlocal completeopt-=preview
+au FileType yaml,yml set nowrap tabstop=2 shiftwidth=2
 
 
 " Save view for folding
