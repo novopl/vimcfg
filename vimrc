@@ -199,6 +199,7 @@ map <Leader>fw      :call FormatFillWidth()<CR>
 map <Leader>a       :call SearchProject()<CR>
 
 map <Leader>vs      :vsp<CR>
+map <Leader>hs      :split<CR>
 "map <Leader>vt      :tabnew TODO<CR>
 map <Leader>sh      :shell<CR>
 map <Leader>wr      :call ChangeWrap()<CR>
