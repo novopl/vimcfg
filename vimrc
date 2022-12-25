@@ -1,15 +1,8 @@
 
-call pathogen#infect()
-call pathogen#helptags()
-"set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
-
 filetype off
 syntax on
 filetype plugin indent on
 
-
-" Force <C-q> and <C-s> to reach the vim application
-silent !stty -ixon > /dev/null 2>/dev/null
 
 """"""""""""""
 "  Settings  "
@@ -49,6 +42,97 @@ set relativenumber
 " Mora natural new tab on split
 set splitbelow
 set splitright
+
+call pathogen#infect()
+call pathogen#helptags()
+"set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
+
+" Force <C-q> and <C-s> to reach the vim application
+silent !stty -ixon > /dev/null 2>/dev/null
+
+
+""""""""""""""
+"  Mappings  "
+""""""""""""""
+
+
+let Tlist_Use_Right_Window = 1
+map <F2>    :NERDTreeToggle<CR>
+map <F3>    :TagbarToggle<CR>
+map <F11>   :CommandTFlush<CR>
+map <S-F11>   :CommandTFlush<CR>
+map <F12>   :so ~/.vimrc<CR>
+map <C-s>   :wa<CR>
+map <C-q>           :q<CR>
+
+" reST commands
+map <Leader>doc yyP0v$r#yyjp
+map <Leader>sec yyp0v$r=
+map <Leader>sub yyp0v$r~
+map <Leader>ssub yyp0v$r-
+
+" Helper macros
+map <Leader>wrap 080lF xi<CR><Esc>
+
+au FileType python map <M-LeftMouse>   *@:call pymode#rope#goto_definition()<CR>
+au FileType python map <C-LeftMouse>   *@:call pymode#rope#goto_definition()<CR>
+
+au FileType cpp map <M-LeftMouse>   :YcmCompleter GoToDefinitionElseDeclaration<CR>
+au FileType cpp map <C-LeftMouse>   :YcmCompleter GoToDefinitionElseDeclaration<CR>
+
+"map <Leader>dt      :call TODO_done()<CR>
+"map <Leader>ct      :call TODO_clear_complete()<CR>
+map <Leader>find    :call SearchProject()<CR>
+map <Leader>fix     :call FixTabs()<CR>
+map <Leader>f=      :call FormatAssignment()<CR>
+map <Leader>fw      :call FormatFillWidth()<CR>
+map <Leader>a       :call SearchProject()<CR>
+
+map <Leader>vs      :vsp<CR>
+map <Leader>hs      :split<CR>
+"map <Leader>vt      :tabnew TODO<CR>
+map <Leader>sh      :shell<CR>
+map <Leader>wr      :call ChangeWrap()<CR>
+" Quick fixes
+map <Leader>isk :set iskeyword=@,48-57,_,192-255
+" Git mappings
+map <Leader>c       :call ToggleQuickfixList()<CR>
+map <Leader>d       :YcmCompleter GoToDefinitionElseDeclaration<CR>
+map <Leader>gl      :Glog<CR>:cw<CR>
+map <Leader>Gl      :Glog --<CR>:cw<CR>
+map <Leader>gs      :call GitStatus()<CR> 
+map <Leader>gd      :call ShowDiff()<CR>
+map <Leader>ge      :Gedit<CR>
+map <Leader>gpush   :Git push<CR>
+map <Leader>gpull   :Git pull<CR>
+map <Leader>ggh     :GitGutterLineHighlightsToggle<CR>
+map <Leader>ggs     :GitGutterStageHunk<CR>
+map <Leader>qg      :!qgit&<CR><CR>
+"map <Leader>nu      :windo call ToggleNumbers()<CR>
+map <Leader>nu      :call ToggleNumbers()<CR>
+map <Leader>nc      :call ToggleLocationList()<CR>
+map <Leader>nq      :call ToggleQuickfixList()<CR>
+map <Leader>nt      :tabnew<CR>
+map <Leader>ican    :call Icanhaz()<CR>
+map <Leader>l       gt
+noremap <S-t>       gT
+" View switching
+noremap <C-h> <C-w>h
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
+" Window movement
+nnoremap <A-.> :call MoveToNextTab()<CR>
+nnoremap <A-,> :call MoveToPrevTab()<CR>
+" ctags
+map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
+map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
+
+" UltiSnips + YouCompleteMe
+" this mapping Enter key to <C-y> to chose the current highlight item 
+" and close the selection list, same as other IDEs.
+" CONFLICT with some plugins like tpope/Endwise
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 
 """""""""""""""""""""""""""
@@ -160,89 +244,6 @@ if has("gui_running")
 endif
 
 
-
-""""""""""""""
-"  Mappings  "
-""""""""""""""
-
-
-let Tlist_Use_Right_Window = 1
-map <F2>    :NERDTreeToggle<CR>
-map <F3>    :TagbarToggle<CR>
-map <F11>   :CommandTFlush<CR>
-map <S-F11>   :CommandTFlush<CR>
-map <F12>   :so ~/.vimrc<CR>
-map <C-s>   :wa<CR>
-map <C-q>           :q<CR>
-
-" reST commands
-map <Leader>doc yyP0v$r#yyjp
-map <Leader>sec yyp0v$r=
-map <Leader>sub yyp0v$r~
-map <Leader>ssub yyp0v$r-
-
-" Helper macros
-map <Leader>wrap 080lF xi<CR><Esc>
-
-au FileType python map <M-LeftMouse>   *@:call pymode#rope#goto_definition()<CR>
-au FileType python map <C-LeftMouse>   *@:call pymode#rope#goto_definition()<CR>
-
-au FileType cpp map <M-LeftMouse>   :YcmCompleter GoToDefinitionElseDeclaration<CR>
-au FileType cpp map <C-LeftMouse>   :YcmCompleter GoToDefinitionElseDeclaration<CR>
-
-"map <Leader>dt      :call TODO_done()<CR>
-"map <Leader>ct      :call TODO_clear_complete()<CR>
-map <Leader>find    :call SearchProject()<CR>
-map <Leader>fix     :call FixTabs()<CR>
-map <Leader>f=      :call FormatAssignment()<CR>
-map <Leader>fw      :call FormatFillWidth()<CR>
-map <Leader>a       :call SearchProject()<CR>
-
-map <Leader>vs      :vsp<CR>
-map <Leader>hs      :split<CR>
-"map <Leader>vt      :tabnew TODO<CR>
-map <Leader>sh      :shell<CR>
-map <Leader>wr      :call ChangeWrap()<CR>
-" Quick fixes
-map <Leader>isk :set iskeyword=@,48-57,_,192-255
-" Git mappings
-map <Leader>c       :call ToggleQuickfixList()<CR>
-map <Leader>d       :YcmCompleter GoToDefinitionElseDeclaration<CR>
-map <Leader>gl      :Glog<CR>:cw<CR>
-map <Leader>Gl      :Glog --<CR>:cw<CR>
-map <Leader>gs      :call GitStatus()<CR> 
-map <Leader>gd      :call ShowDiff()<CR>
-map <Leader>ge      :Gedit<CR>
-map <Leader>gpush   :Git push<CR>
-map <Leader>gpull   :Git pull<CR>
-map <Leader>ggh     :GitGutterLineHighlightsToggle<CR>
-map <Leader>ggs     :GitGutterStageHunk<CR>
-map <Leader>qg      :!qgit&<CR><CR>
-"map <Leader>nu      :windo call ToggleNumbers()<CR>
-map <Leader>nu      :call ToggleNumbers()<CR>
-map <Leader>nc      :call ToggleLocationList()<CR>
-map <Leader>nq      :call ToggleQuickfixList()<CR>
-map <Leader>nt      :tabnew<CR>
-map <Leader>ican    :call Icanhaz()<CR>
-map <Leader>l       gt
-noremap <S-t>       gT
-" View switching
-noremap <C-h> <C-w>h
-noremap <C-j> <C-w>j
-noremap <C-k> <C-w>k
-noremap <C-l> <C-w>l
-" Window movement
-nnoremap <A-.> :call MoveToNextTab()<CR>
-nnoremap <A-,> :call MoveToPrevTab()<CR>
-" ctags
-map <C-\> :tab split<CR>:exec("tag ".expand("<cword>"))<CR>
-map <A-]> :vsp <CR>:exec("tag ".expand("<cword>"))<CR>
-
-" UltiSnips + YouCompleteMe
-" this mapping Enter key to <C-y> to chose the current highlight item 
-" and close the selection list, same as other IDEs.
-" CONFLICT with some plugins like tpope/Endwise
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 
 """""""""""""""
